@@ -75,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: Theme.of(context).primaryColor,
           duration: Duration(seconds: 3),
           shape: StadiumBorder(),
-          margin: EdgeInsets.symmetric(vertical: 16,horizontal: 12),
+          // margin: EdgeInsets.symmetric(vertical: 16,horizontal: 12),
           elevation: 0,
         );
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
