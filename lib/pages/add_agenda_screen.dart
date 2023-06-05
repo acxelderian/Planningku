@@ -184,9 +184,7 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                       if (pickedTime != null) {
                         setState(() {
                           _waktuController.text =
-                              pickedTime.hour.toString().padLeft(2, "0") +
-                                  ":" +
-                                  pickedTime.minute.toString().padLeft(2, "0");
+                              "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
                         });
                       }
                     },

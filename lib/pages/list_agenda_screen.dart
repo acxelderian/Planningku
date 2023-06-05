@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
@@ -7,11 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-
 class ListAgendaScreen extends StatefulWidget {
   static const routeName = '/list_agenda';
 
-  ListAgendaScreen({Key? key}) : super(key: key);
+  const ListAgendaScreen({Key? key}) : super(key: key);
 
   @override
   State<ListAgendaScreen> createState() => _ListAgendaScreenState();
@@ -99,20 +97,20 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
           final agendaDocs = snapshot.data?.docs ?? [];
           listAgenda.clear(); // Clear the listAgenda before populating it again
-          agendaDocs.forEach((agendaDoc) {
+          for (var agendaDoc in agendaDocs) {
             final agendaData = agendaDoc.data();
             if (agendaData['date'].compareTo(Timestamp.now()) > 0 &&
                 agendaDoc['email'] == _activeUser?.email) {
               final agenda = Agenda.fromJson(agendaData);
               listAgenda.add(agenda);
             }
-          });
+          }
           updateEventsFromListAgenda(listAgenda);
           return CustomScrollView(
             slivers: [
@@ -128,7 +126,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                   rangeSelectionMode: _rangeSelectionMode,
                   eventLoader: _getEventsForDay,
                   startingDayOfWeek: StartingDayOfWeek.monday,
-                  calendarStyle: CalendarStyle(
+                  calendarStyle: const CalendarStyle(
                     outsideDaysVisible: false,
                   ),
                   onDaySelected: _onDaySelected,
@@ -145,7 +143,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                 ),
               ),
               SliverList.separated(
-                separatorBuilder: (context, index) => SizedBox(
+                separatorBuilder: (context, index) => const SizedBox(
                   height: 15,
                 ),
                 itemBuilder: (BuildContext context, int index) {

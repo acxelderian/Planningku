@@ -4,8 +4,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class CarouselScreen extends StatefulWidget {
   static const routeName = "/carousel_screen";
+
+  const CarouselScreen({super.key});
+
   @override
-  _CarouselScreenState createState() => _CarouselScreenState();
+  State<CarouselScreen> createState() => _CarouselScreenState();
 }
 
 class _CarouselScreenState extends State<CarouselScreen> {
@@ -35,7 +38,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Carousel App'),
+        title: const Text('Carousel App'),
       ),
       body: Column(
         children: [
@@ -57,7 +60,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                   items: carouselItems.map((item) {
                     return Builder(
                       builder: (BuildContext context) {
-                        return Container(
+                        return SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Center(
                             child: Column(
@@ -70,18 +73,18 @@ class _CarouselScreenState extends State<CarouselScreen> {
                                 ),
                                 Text(
                                   item['title']!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 24.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: 16.0),
+                                const SizedBox(height: 16.0),
                                 Padding(
                                   padding: const EdgeInsets.only(left:64.0,right:64.0),
                                   child: Text(
                                     item['description']!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16.0,
                                     ),
                                     textAlign: TextAlign.center,
@@ -108,7 +111,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                           height: 72,
                           width: 84,
                           child: IconButton(
-                            icon: Row(
+                            icon: const Row(
                               children: [
                                 Icon(Icons.arrow_back_rounded,size: 32),
                                 Text('Prev'),
@@ -135,7 +138,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                               child: Container(
                                 width: 12.0,
                                 height: 12.0,
-                                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: currentIndex == entry.key ? Colors.blue : Colors.grey,
@@ -151,7 +154,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                             icon: Row(
                               children: [
                                 Text(next),
-                                Icon(Icons.arrow_forward_rounded,size: 32),
+                                const Icon(Icons.arrow_forward_rounded,size: 32),
                               ],
                             ),
                             iconSize: 32.0,

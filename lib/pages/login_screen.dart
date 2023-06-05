@@ -2,12 +2,13 @@ import 'package:dicoding/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = "/login_screen";
+
+  const LoginScreen({super.key});
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -60,16 +61,14 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading=true;
       });
       try {
-        final navigator = Navigator.of(context);
         final email = _emailController.text;
         final password = _passwordController.text;
         await _auth.signInWithEmailAndPassword(
             email: email,
             password: password
         );
-        // navigator.pushReplacementNamed(ToDoListPage.routeName);
         Navigator.of(context).push(MaterialPageRoute(builder: (context){
-          return HomeScreen();
+          return const HomeScreen();
         }));
       } on Exception catch (e) {
         // TODO
@@ -84,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
           elevation: 0,
 
         );
-        ScaffoldMessenger.of(context)..showSnackBar(snackbar);
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
       } finally{
         setState(() {
           _isLoading = false;
@@ -97,10 +96,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Page'),
+        title: const Text('Login Page'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -108,15 +107,15 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset("images/planningku-logo-nobg-black.png",height: 80,width: 80,),
-              SizedBox(height: 12,),
-              _isLoading?SizedBox(child: const Center(child: CircularProgressIndicator()),height: 54,):SizedBox(child: Container(),height: 54,),
+              const SizedBox(height: 12,),
+              _isLoading?const SizedBox(height: 54,child: Center(child: CircularProgressIndicator()),):SizedBox(height: 54,child: Container(),),
               const SizedBox(height: 12),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 32.0),
+                margin: const EdgeInsets.symmetric(horizontal: 32.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
-                  color: Color.fromRGBO(68, 68, 68, 0.05),
-                  boxShadow:  [
+                  color: const Color.fromRGBO(68, 68, 68, 0.05),
+                  boxShadow:  const [
                     BoxShadow(
                       color: Color.fromRGBO(68, 68, 68, 0.05),
                       spreadRadius: 1,
@@ -131,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           'Login Into Account',
@@ -145,53 +144,52 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Email',
                           border: OutlineInputBorder(),
                           helperText: " ",
                         ),
                         validator: _validateEmail,
                       ),
-                      SizedBox(height: 8.0,),
+                      const SizedBox(height: 8.0,),
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscureText,
                         keyboardType: TextInputType.visiblePassword,
                         decoration:  InputDecoration(
                             labelText: "Password",
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                             helperText: " ",
                             suffixIcon: IconButton(
                                 onPressed: (){
                                   setState(() {
                                     _obscureText=!_obscureText;
                                   });
-                                  print(_obscureText);
                                 },
                                 icon: Icon(_obscureText?Icons.remove_red_eye_outlined:Icons.remove_red_eye_rounded)
                             )
                         ),
                         validator: _validatePassword,
                       ),
-                      SizedBox(height: 8.0,),
+                      const SizedBox(height: 8.0,),
                       MaterialButton(
                         color:Theme.of(context).primaryColor,
                         height: 50,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         onPressed: _login,
-                        child: Text('Login',style: TextStyle(color:Colors.white),),
+                        child: const Text('Login',style: TextStyle(color:Colors.white),),
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Don't have an account? "),
+                          const Text("Don't have an account? "),
                           TextButton(
                             onPressed: () {
                               // Navigate to the register page
                               Navigator.pushNamed(context, '/register_screen');
                             },
-                            child: Text('Register'),
+                            child: const Text('Register'),
                           ),
                         ],
                       ),

@@ -1,7 +1,6 @@
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/add_agenda_screen.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
-import 'package:dicoding/pages/home_kas_screen.dart';
 import 'package:dicoding/pages/list_agenda_screen.dart';
 import 'package:dicoding/pages/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
           primarySwatch: Colors.blueGrey,
         ),
         routes: {
-          ListAgendaScreen.routeName: (context)=> ListAgendaScreen(),
+          ListAgendaScreen.routeName: (context)=> const ListAgendaScreen(),
           // AddKasScreen.routeName: (context) => const AddKasScreen(),
           DetailAgendaScreen.routeName: (context) => DetailAgendaScreen(
               agenda: ModalRoute.of(context)?.settings.arguments as Agenda
@@ -41,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
             body: IndexedStack(
               index: _currentIndex,
               children: [
-                ListAgendaScreen(),
+                const ListAgendaScreen(),
                 AddAgendaScreen(updateIndex: changePage),
                 SettingsScreen()
               ],

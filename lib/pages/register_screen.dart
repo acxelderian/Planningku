@@ -1,11 +1,12 @@
-import 'package:dicoding/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = "/register_screen";
+
+  const RegisterScreen({super.key});
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -48,12 +49,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _register() async {
     if (_formKey.currentState!.validate()) {
-      // Perform login logic here
-      String email = _emailController.text;
-      String password = _passwordController.text;
-      // Add your logic to validate and authenticate the user
-      print('Email: $email');
-      print('Password: $password');
       setState(() {
         _isLoading=true;
       });
@@ -73,8 +68,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             e.toString()
           ),
           backgroundColor: Theme.of(context).primaryColor,
-          duration: Duration(seconds: 3),
-          shape: StadiumBorder(),
+          duration: const Duration(seconds: 3),
+          shape: const StadiumBorder(),
           // margin: EdgeInsets.symmetric(vertical: 16,horizontal: 12),
           elevation: 0,
         );
@@ -91,10 +86,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register Page'),
+        title: const Text('Register Page'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -102,11 +97,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 32.0),
+                margin: const EdgeInsets.symmetric(horizontal: 32.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
-                  color: Color.fromRGBO(68, 68, 68, 0.05),
-                  boxShadow:  [
+                  color: const Color.fromRGBO(68, 68, 68, 0.05),
+                  boxShadow:  const [
                     BoxShadow(
                       color: Color.fromRGBO(68, 68, 68, 0.05),
                       spreadRadius: 1,
@@ -121,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           'Register',
@@ -135,53 +130,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Email',
                           border: OutlineInputBorder(),
                           helperText: " ",
                         ),
                         validator: _validateEmail,
                       ),
-                      SizedBox(height: 8.0,),
+                      const SizedBox(height: 8.0,),
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscureText,
                         keyboardType: TextInputType.visiblePassword,
                         decoration:  InputDecoration(
                             labelText: "Password",
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                             helperText: " ",
                             suffixIcon: IconButton(
                                 onPressed: (){
                                   setState(() {
                                     _obscureText=!_obscureText;
                                   });
-                                  print(_obscureText);
                                 },
                                 icon: Icon(_obscureText?Icons.remove_red_eye_outlined:Icons.remove_red_eye_rounded)
                             )
                         ),
                         validator: _validatePassword,
                       ),
-                      SizedBox(height: 8.0,),
+                      const SizedBox(height: 8.0,),
                       MaterialButton(
                         color:Theme.of(context).primaryColor,
                         height: 50,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         onPressed: _register,
-                        child: Text('Register',style: TextStyle(color:Colors.white),),
+                        child: const Text('Register',style: TextStyle(color:Colors.white),),
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Already have an account? "),
+                          const Text("Already have an account? "),
                           TextButton(
                             onPressed: () {
                               // Navigate to the register page
                               Navigator.pop(context);
                             },
-                            child: Text('Login'),
+                            child: const Text('Login'),
                           ),
                         ],
                       ),
@@ -189,8 +183,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 12,),
-              _isLoading?SizedBox(child: const Center(child: CircularProgressIndicator()),height: 54,):SizedBox(child: Container(),height: 54,),
+              const SizedBox(height: 12,),
+              _isLoading?const SizedBox(height: 54,child: Center(child: CircularProgressIndicator()),):SizedBox(height: 54,child: Container(),),
               const SizedBox(height: 12),
               Image.asset("images/planningku-logo-nobg-black.png",height: 80,width: 80,),
             ],
