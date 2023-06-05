@@ -1,8 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-<<<<<<< Updated upstream
-import 'package:dicoding/models/agenda.dart';
-=======
->>>>>>> Stashed changes
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,37 +15,20 @@ class AddAgendaScreen extends StatefulWidget {
 }
 
 class _AddAgendaScreen extends State<AddAgendaScreen> {
-<<<<<<< Updated upstream
-  String nama = "", deskripsi = "", tanggal = "", waktu = "";
-  String? jenis = "";
-  int nominal = 0;
-  bool isPendapatan = false;
-=======
   TextEditingController _namaController = TextEditingController();
   TextEditingController _deskripsiController = TextEditingController();
   TextEditingController _tanggalController = TextEditingController();
   TextEditingController _waktuController = TextEditingController();
   bool _success = false;
   String _jenis = "Pekerjaan";
-  int _nominal = 0;
-  bool _isPendapatan = false;
->>>>>>> Stashed changes
   final _firestore = FirebaseFirestore.instance;
   late User? _activeUser;
   final _auth = FirebaseAuth.instance;
 
   void getCurrentUser() async {
-<<<<<<< Updated upstream
-    try {
-      _activeUser = _auth.currentUser;
-
-    }
-    catch (e) {
-=======
     try{
       _activeUser = _auth.currentUser;
     }catch(e){
->>>>>>> Stashed changes
       print(e);
     }
   }
@@ -59,8 +38,6 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
     super.initState();
     getCurrentUser();
   }
-<<<<<<< Updated upstream
-=======
 
   @override
   void dispose() {
@@ -107,7 +84,6 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
     );
   }
 
->>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,7 +197,7 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                   DropdownButtonFormField<String>(
                     value: _jenis,
                     isExpanded: true,
-                    items: <DropdownMenuItem<String>>[
+                    items: const <DropdownMenuItem<String>>[
                       DropdownMenuItem<String>(
                         value: "Pekerjaan",
                         child: Text(
@@ -231,27 +207,6 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                           ),
                         ),
                       ),
-<<<<<<< Updated upstream
-                      child: const Text('Submit'),
-                      onPressed: () {
-                        String msg = "";
-                        if(nama == "" || deskripsi == "" || tanggal == "" || waktu == "" || jenis == "") {
-                          msg = "Input tidak sesuai! Gagal menambah agenda baru";
-                        }
-                        else {
-                          _firestore.collection('agenda').add({
-                            'nama': nama,
-                            'deskripsi': deskripsi,
-                            'tanggal': tanggal,
-                            'waktu': waktu,
-                            'jenis': jenis,
-                            'email': _activeUser?.email,
-                          });
-                          msg = "Berhasil menambah agenda baru";
-                        }
-                        return _showDialog(context, msg);
-                      },
-=======
                       DropdownMenuItem<String>(
                         value: "Pendidikan",
                         child: Text(
@@ -267,13 +222,12 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                         _jenis = value!;
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
                       hintText: "Type",
                       prefixIcon: Icon(Icons.category),
->>>>>>> Stashed changes
                     ),
                   ),
                   const SizedBox(

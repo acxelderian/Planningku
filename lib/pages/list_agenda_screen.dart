@@ -1,22 +1,12 @@
-<<<<<<< Updated upstream
-=======
 import 'dart:collection';
->>>>>>> Stashed changes
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
-<<<<<<< Updated upstream
-import 'package:dicoding/widgets/agenda_tile.dart';
-import 'package:dicoding/widgets/display_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-class ListAgendaScreen extends StatefulWidget {
-  static const routeName='/list_agenda';
-  const ListAgendaScreen({Key? key}) : super(key: key);
-=======
-import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+
 
 class ListAgendaScreen extends StatefulWidget {
   static const routeName = '/list_agenda';
@@ -31,7 +21,6 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
   late final ValueNotifier<List<Agenda>> _selectedEvents;
   final _firestore = FirebaseFirestore.instance;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  int _listAgendaLength = 0;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay = DateTime.now();
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -45,6 +34,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
     super.initState();
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    getCurrentUser();
   }
   @override
   void dispose() {
@@ -80,14 +70,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
       });
     }
   }
->>>>>>> Stashed changes
 
-  @override
-  State<ListAgendaScreen> createState() => _ListAgendaScreenState();
-}
-
-class _ListAgendaScreenState extends State<ListAgendaScreen> {
-  final _firestore = FirebaseFirestore.instance;
   late User? _activeUser;
   final _auth = FirebaseAuth.instance;
 
@@ -99,12 +82,6 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
     catch (e) {
       print(e);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
   }
 
   @override
@@ -130,7 +107,8 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
           listAgenda.clear(); // Clear the listAgenda before populating it again
           agendaDocs.forEach((agendaDoc) {
             final agendaData = agendaDoc.data();
-            if (agendaData['date'].compareTo(Timestamp.now()) > 0) {
+            if (agendaData['date'].compareTo(Timestamp.now()) > 0 &&
+                agendaDoc['email'] == _activeUser?.email) {
               final agenda = Agenda.fromJson(agendaData);
               listAgenda.add(agenda);
             }
@@ -166,45 +144,6 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                   },
                 ),
               ),
-<<<<<<< Updated upstream
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: FractionallySizedBox(
-              widthFactor: 0.8,
-                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                    stream: _firestore.collection('agenda')
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                            child: CircularProgressIndicator()
-                        );
-                      }
-                      return ListView(
-                          reverse: true,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 16,
-                          ),
-                          children: snapshot.data!.docs.map((document) {
-                            final data = document.data();
-                            if(data['email'] == _activeUser?.email) {
-                              final agenda = Agenda(id: data['id'], nama: data['nama'], deskripsi: data['deskripsi'], tanggal: data['tanggal'], waktu: data['waktu'], jenis: data['jenis'], email: data['email']);
-                              return AgendaTile(
-                                  agenda: agenda
-                              );
-                            }
-                            return SizedBox(height: 0,);
-                          }).toList()
-                      );
-                    }
-                )
-              ),
-            )
-        ],
-=======
               SliverList.separated(
                 separatorBuilder: (context, index) => SizedBox(
                   height: 15,
@@ -218,7 +157,6 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
             ],
           );
         },
->>>>>>> Stashed changes
       ),
     );
   }
