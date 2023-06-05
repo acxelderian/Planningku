@@ -16,6 +16,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
+  void changePage(int index){
+    setState(() {
+      _currentIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           primarySwatch: Colors.blueGrey,
         ),
         routes: {
-          ListAgendaScreen.routeName: (context)=> const ListAgendaScreen(),
+          ListAgendaScreen.routeName: (context)=> ListAgendaScreen(),
           // AddKasScreen.routeName: (context) => const AddKasScreen(),
           DetailAgendaScreen.routeName: (context) => DetailAgendaScreen(
               agenda: ModalRoute.of(context)?.settings.arguments as Agenda
@@ -37,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
               index: _currentIndex,
               children: [
                 ListAgendaScreen(),
-                AddAgendaScreen(),
+                AddAgendaScreen(updateIndex: changePage),
                 SettingsScreen()
               ],
             ),

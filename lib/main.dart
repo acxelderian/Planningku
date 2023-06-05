@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue
       ),
       routes: {
-        ListAgendaScreen.routeName: (context)=> const ListAgendaScreen(),
+        ListAgendaScreen.routeName: (context)=> ListAgendaScreen(),
         // AddKasScreen.routeName: (context) => const AddKasScreen(),
         DetailAgendaScreen.routeName: (context) => DetailAgendaScreen(
             agenda: ModalRoute.of(context)?.settings.arguments as Agenda

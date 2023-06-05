@@ -1,7 +1,12 @@
+<<<<<<< Updated upstream
+=======
+import 'dart:collection';
+>>>>>>> Stashed changes
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
+<<<<<<< Updated upstream
 import 'package:dicoding/widgets/agenda_tile.dart';
 import 'package:dicoding/widgets/display_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +14,73 @@ import 'package:flutter/material.dart';
 class ListAgendaScreen extends StatefulWidget {
   static const routeName='/list_agenda';
   const ListAgendaScreen({Key? key}) : super(key: key);
+=======
+import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+class ListAgendaScreen extends StatefulWidget {
+  static const routeName = '/list_agenda';
+
+  ListAgendaScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ListAgendaScreen> createState() => _ListAgendaScreenState();
+}
+
+class _ListAgendaScreenState extends State<ListAgendaScreen> {
+  late final ValueNotifier<List<Agenda>> _selectedEvents;
+  final _firestore = FirebaseFirestore.instance;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  int _listAgendaLength = 0;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay = DateTime.now();
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+  final kFirstDay = DateTime(DateTime.now().year, DateTime.now().month - 3, DateTime.now().day);
+  final kLastDay = DateTime(DateTime.now().year, DateTime.now().month + 3, DateTime.now().day);
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = _focusedDay;
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+  }
+  @override
+  void dispose() {
+    _selectedEvents.dispose();
+    super.dispose();
+  }
+
+  List<Agenda> _getEventsForDay(DateTime day) {
+    // Implementation example
+    return kEvents[day] ?? [];
+  }
+  LinkedHashMap<DateTime, List<Agenda>> kEvents = LinkedHashMap<DateTime, List<Agenda>>(
+    equals: isSameDay,
+    hashCode: getHashCode,
+  );
+  void updateEventsFromListAgenda(List<Agenda> listAgenda) {
+    kEvents.clear(); // Clear existing events
+
+    for (final agenda in listAgenda) {
+      final dateTime = DateTime.parse(agenda.tanggal);
+      kEvents[dateTime] = [agenda];
+    }
+    _getEventsForDay;
+  }
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+        _rangeStart = null; // Important to clean those
+        _rangeEnd = null;
+        _rangeSelectionMode = RangeSelectionMode.toggledOff;
+      });
+    }
+  }
+>>>>>>> Stashed changes
 
   @override
   State<ListAgendaScreen> createState() => _ListAgendaScreenState();
@@ -41,29 +113,60 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
       appBar: AppBar(
         title: const Text('Aplikasi Agenda'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Center(
-              child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    // if(constraints.maxHeight > 250) {
-                    //   return displayCard();
-                    // }
-                    return SizedBox(
-                      height: 20,
-                      child: Text(
-                        "List Agenda",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "Poppins"
-                        ),
-                      ),
-                    );
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: _firestore.collection('agendas').orderBy('date', descending: true).snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final agendaDocs = snapshot.data?.docs ?? [];
+          listAgenda.clear(); // Clear the listAgenda before populating it again
+          agendaDocs.forEach((agendaDoc) {
+            final agendaData = agendaDoc.data();
+            if (agendaData['date'].compareTo(Timestamp.now()) > 0) {
+              final agenda = Agenda.fromJson(agendaData);
+              listAgenda.add(agenda);
+            }
+          });
+          updateEventsFromListAgenda(listAgenda);
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: TableCalendar<Agenda>(
+                  firstDay: kFirstDay,
+                  lastDay: kLastDay,
+                  focusedDay: _focusedDay,
+                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  rangeStartDay: _rangeStart,
+                  rangeEndDay: _rangeEnd,
+                  calendarFormat: _calendarFormat,
+                  rangeSelectionMode: _rangeSelectionMode,
+                  eventLoader: _getEventsForDay,
+                  startingDayOfWeek: StartingDayOfWeek.monday,
+                  calendarStyle: CalendarStyle(
+                    outsideDaysVisible: false,
+                  ),
+                  onDaySelected: _onDaySelected,
+                  onFormatChanged: (format) {
+                    if (_calendarFormat != format) {
+                      setState(() {
+                        _calendarFormat = format;
+                      });
+                    }
                   },
+                  onPageChanged: (focusedDay) {
+                    _focusedDay = focusedDay;
+                  },
+                ),
               ),
+<<<<<<< Updated upstream
             ),
           ),
           Expanded(
@@ -101,8 +204,28 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
               ),
             )
         ],
+=======
+              SliverList.separated(
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 15,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  final agenda = listAgenda[index];
+                  return buildItem(context, agenda, Colors.greenAccent);
+                },
+                itemCount: listAgenda.length,
+              ),
+            ],
+          );
+        },
+>>>>>>> Stashed changes
       ),
     );
+  }
+
+
+  static int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
   }
 }
 
@@ -110,17 +233,18 @@ Widget buildItem(BuildContext context, Agenda agenda, Color color) {
   return ListTile(
     contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     leading: Icon(
-      agenda.jenis == "Pendidikan" ? Icons.cast_for_education : Icons.work, color: Colors.black,
+      agenda.jenis == "Pendidikan" ? Icons.cast_for_education : Icons.work,
+      color: Colors.black,
     ),
     title: Text(
-        agenda.nama,
+      agenda.nama,
       style: const TextStyle(
         fontSize: 16,
         fontFamily: "Poppins",
       ),
     ),
     subtitle: Text(
-        "${agenda.tanggal} ${agenda.waktu}",
+      "${agenda.tanggal} ${agenda.waktu}",
       style: const TextStyle(
         fontSize: 16,
         fontFamily: "Poppins",
@@ -132,13 +256,14 @@ Widget buildItem(BuildContext context, Agenda agenda, Color color) {
     ),
     tileColor: color,
     onTap: () {
-      Navigator.push(context, MaterialPageRoute(
+      Navigator.push(
+        context,
+        MaterialPageRoute(
           builder: (context) {
-            return DetailAgendaScreen(agenda : agenda);
-          }
-      ));
+            return DetailAgendaScreen(agenda: agenda);
+          },
+        ),
+      );
     },
   );
 }
-
-
