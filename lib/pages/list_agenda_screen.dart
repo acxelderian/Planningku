@@ -1,10 +1,39 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
+import 'package:dicoding/widgets/agenda_tile.dart';
 import 'package:dicoding/widgets/display_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-class ListAgendaScreen extends StatelessWidget {
+class ListAgendaScreen extends StatefulWidget {
   static const routeName='/list_agenda';
   const ListAgendaScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ListAgendaScreen> createState() => _ListAgendaScreenState();
+}
+
+class _ListAgendaScreenState extends State<ListAgendaScreen> {
+  final _firestore = FirebaseFirestore.instance;
+  late User? _activeUser;
+  final _auth = FirebaseAuth.instance;
+
+  void getCurrentUser() async {
+    try {
+      _activeUser = _auth.currentUser;
+
+    }
+    catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,17 +70,36 @@ class ListAgendaScreen extends StatelessWidget {
             flex: 3,
             child: FractionallySizedBox(
               widthFactor: 0.8,
-              child: ListView.separated(
-                separatorBuilder: (context, index) => const SizedBox(
-                  height: 15,
-                ),
-                itemCount: listAgenda.length,
-                itemBuilder: (context,index) {
-                  return buildItem(context, listAgenda[index], Colors.greenAccent);
-                },
+                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: _firestore.collection('agenda')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                            child: CircularProgressIndicator()
+                        );
+                      }
+                      return ListView(
+                          reverse: true,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 16,
+                          ),
+                          children: snapshot.data!.docs.map((document) {
+                            final data = document.data();
+                            if(data['email'] == _activeUser?.email) {
+                              final agenda = Agenda(id: data['id'], nama: data['nama'], deskripsi: data['deskripsi'], tanggal: data['tanggal'], waktu: data['waktu'], jenis: data['jenis'], email: data['email']);
+                              return AgendaTile(
+                                  agenda: agenda
+                              );
+                            }
+                            return SizedBox(height: 0,);
+                          }).toList()
+                      );
+                    }
+                )
               ),
             )
-          ),
         ],
       ),
     );

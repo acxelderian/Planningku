@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddAgendaScreen extends StatefulWidget {
@@ -14,6 +16,25 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
   String? jenis = "";
   int nominal = 0;
   bool isPendapatan = false;
+  final _firestore = FirebaseFirestore.instance;
+  late User? _activeUser;
+  final _auth = FirebaseAuth.instance;
+
+  void getCurrentUser() async {
+    try {
+      _activeUser = _auth.currentUser;
+
+    }
+    catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,9 +154,14 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                           msg = "Input tidak sesuai! Gagal menambah agenda baru";
                         }
                         else {
-                          listAgenda.add(
-                              Agenda(nama: nama, deskripsi: deskripsi, tanggal: tanggal, waktu: waktu, jenis: jenis!)
-                          );
+                          _firestore.collection('agenda').add({
+                            'nama': nama,
+                            'deskripsi': deskripsi,
+                            'tanggal': tanggal,
+                            'waktu': waktu,
+                            'jenis': jenis,
+                            'email': _activeUser?.email,
+                          });
                           msg = "Berhasil menambah agenda baru";
                         }
                         return _showDialog(context, msg);
