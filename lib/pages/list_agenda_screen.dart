@@ -4,7 +4,10 @@ import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../Provider/dbprovider.dart';
 
 class ListAgendaScreen extends StatefulWidget {
   static const routeName = '/list_agenda';
@@ -148,7 +151,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   final agenda = listAgenda[index];
-                  return buildItem(context, agenda, Colors.greenAccent);
+                  return buildItem(context, agenda, Colors.blueAccent);
                 },
                 itemCount: listAgenda.length,
               ),
@@ -201,5 +204,30 @@ Widget buildItem(BuildContext context, Agenda agenda, Color color) {
         ),
       );
     },
+    trailing: Wrap(
+      children: <Widget>[
+        IconButton(
+            icon: Icon(Icons.star),
+            color: Colors.yellow,
+            onPressed: () {
+              Provider.of<DbProvider> (context, listen: false).addAgenda(
+                 agenda
+              );
+            }
+        ),
+        IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              // edit agenda
+            }
+        ),
+        IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              // delete agenda
+            }
+        ),
+      ],
+    ),
   );
 }

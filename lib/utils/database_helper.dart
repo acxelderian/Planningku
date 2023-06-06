@@ -15,7 +15,7 @@ class DatabaseHelper{
   Future<Database> _initializeDb() async {
     var path = await getDatabasesPath();
     var db = openDatabase(
-      "$path/todo_db.db",
+      "$path/agenda_db.db",
       onCreate: (db,version) async{
         await db.execute('CREATE TABLE $_tableName(id INTEGER PRIMARY KEY, task TEXT, owner TEXT, dateCreated TEXT)');
       },
