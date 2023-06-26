@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class Agenda {
+  late int? id;
   late String nama;
   late String deskripsi;
   late String tanggal;
@@ -11,6 +12,7 @@ class Agenda {
   late String jenis;
   Agenda(
       {
+        this.id,
         required this.nama,
         required this.deskripsi,
         required this.tanggal,
@@ -21,6 +23,7 @@ class Agenda {
 
   Map <String, dynamic> toMap() {
     return {
+      "id": id,
       "nama":nama,
       "deskripsi":deskripsi,
       "tanggal":tanggal,
@@ -29,8 +32,9 @@ class Agenda {
     };
   }
 
-  Agenda.formMap(Map<String,dynamic> map)
+  Agenda.fromMap(Map<String,dynamic> map)
   {
+    id = map["id"];
     nama = map["nama"];
     deskripsi = map["deskripsi"];
     tanggal = map["tanggal"];
