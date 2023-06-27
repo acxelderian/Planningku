@@ -1,3 +1,4 @@
+import 'package:dicoding/Provider/dbprovider.dart';
 import 'package:dicoding/pages/add_agenda_screen.dart';
 import 'package:dicoding/pages/carousel_screen.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dicoding/pages/list_agenda_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 import 'models/agenda.dart';
@@ -26,38 +28,44 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Carousel App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue
-      ),
-      routes: {
-        ListAgendaScreen.routeName: (context)=> ListAgendaScreen(),
-        // AddKasScreen.routeName: (context) => const AddKasScreen(),
-        DetailAgendaScreen.routeName: (context) => DetailAgendaScreen(
-            agenda: ModalRoute.of(context)?.settings.arguments as Agenda
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => DbProvider()
+        )
+      ],
+      child: MaterialApp(
+        title: 'Carousel App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue
         ),
-        CarouselScreen.routeName:(context) => CarouselScreen(),
-        LoginScreen.routeName:(context) => LoginScreen(),
-        RegisterScreen.routeName:(context) => RegisterScreen(),
-      },
-      home: FutureBuilder<User?>(
-        future: checkLoginStatus(),
-        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
-            if (snapshot.data != null) {
-              return HomeScreen();
-            } else {
-              return CarouselScreen();
-            }
-          }
+        routes: {
+          ListAgendaScreen.routeName: (context)=> ListAgendaScreen(),
+          DetailAgendaScreen.routeName: (context) => DetailAgendaScreen(
+              agenda: ModalRoute.of(context)?.settings.arguments as Agenda
+          ),
+          CarouselScreen.routeName:(context) => CarouselScreen(),
+          LoginScreen.routeName:(context) => LoginScreen(),
+          RegisterScreen.routeName:(context) => RegisterScreen(),
         },
+        home: FutureBuilder<User?>(
+          future: checkLoginStatus(),
+          builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              if (snapshot.data != null) {
+                return HomeScreen();
+              } else {
+                return CarouselScreen();
+              }
+            }
+          },
+        ),
       ),
     );
   }
