@@ -172,8 +172,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
 }
 
 Widget buildItem(BuildContext context, Agenda agenda, Color color) {
-  // int index = _agendas!.indexWhere((item) => item.id == agenda.id);
-  // _isButtonPressed = (index != -1);
+  print(agenda.id);
   return ListTile(
     contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     leading: Icon(
@@ -262,55 +261,48 @@ Widget buildItem(BuildContext context, Agenda agenda, Color color) {
         //     );
         //   },
         // ),
-        Consumer<DbProvider>(
-          builder: (context, dbProvider, _) {
-            return FutureBuilder<List<Agenda>>(
-              future: dbProvider.getAgendas(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  // Handle the loading state if needed
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  // Handle the error state if needed
-                  return Text('Error');
-                } else {
-                  List<Agenda> agendas = snapshot.data!;
-                  int index = agendas.indexWhere((item) => item.id == agenda.id);
-
-                  if (index == -1) {
-                    // print("Index of agenda with ID $targetId: $index");
-                    return IconButton(
-                      icon: Icon(Icons.star),
-                          color: Colors.transparent,
-                          onPressed: () {
-                            dbProvider.addAgenda(agenda);
-                          },
-                    );
-                  } else {
-                    // print("Agenda with ID $targetId not found.");
-                    return IconButton(
-                      icon: Icon(Icons.star),
-                      color: Colors.yellow,
-                      onPressed: () {
-                        // dbProvider.addAgenda(agenda);
-                        dbProvider.deleteAgenda(agenda.id!);
-                      },
-                    );
-                  }
-                  // print(arrAgenda);
-                  // Color color = isFavorite ? Colors.yellow : Colors.transparent;
-                  // return IconButton(
-                  //   icon: Icon(Icons.star),
-                  //   // color: color,
-                  //   onPressed: () {
-                  //     dbProvider.addAgenda(agenda);
-                  //   },
-                  // );
-                }
-              },
-            );
-          },
-        ),
+        // IconButton(
+        //   icon: Icon(Icons.star),
+        //   color: Colors.white,
+        //   onPressed: () {
+        //     // dbProvider.addAgenda(agenda);
+        //   },
+        // ),
+        // Consumer<DbProvider>(
+        //   builder: (context, dbProvider, _) {
+        //     return FutureBuilder<List<Agenda>>(
+        //       future: dbProvider.getAgendaByIdCanBeNull(agenda.id!),
+        //       builder: (context, snapshot) {
+        //         if (snapshot.connectionState == ConnectionState.waiting) {
+        //           // Handle the loading state if needed
+        //           return CircularProgressIndicator();
+        //         } else if (snapshot.hasError) {
+        //           // Handle the error state if needed
+        //           return Text('Error');
+        //         } else {
+        //           List<Agenda> agendas = snapshot.data!;
+        //           if (agendas.length == 0) {
+        //             return IconButton(
+        //               icon: Icon(Icons.star),
+        //                   color: Colors.white30,
+        //                   onPressed: () {
+        //                     dbProvider.addAgenda(agenda);
+        //                   },
+        //             );
+        //           } else {
+        //             return IconButton(
+        //               icon: Icon(Icons.star),
+        //               color: Colors.yellow,
+        //               onPressed: () {
+        //                 dbProvider.deleteAgenda(agenda.id!);
+        //               },
+        //             );
+        //           }
+        //         }
+        //       },
+        //     );
+        //   },
+        // ),
         IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {

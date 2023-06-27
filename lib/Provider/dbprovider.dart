@@ -24,6 +24,10 @@ class DbProvider extends ChangeNotifier{
     return await _dbHelper.getAgendaById(id);
   }
 
+  Future <List<Agenda>> getAgendaByIdCanBeNull(int id) async{
+    return await _dbHelper.getAgendaByIdCanBeNull(id);
+  }
+
   Future <List<Agenda>> getAgendas() async {
     _getAllAgendas();
     return _arrAgenda;
@@ -34,8 +38,4 @@ class DbProvider extends ChangeNotifier{
     _getAllAgendas();
   }
 
-  Future<bool> isAgendaFavorite(int id) async{
-    Agenda? agenda = await _dbHelper.getAgendaByIdCanBeNull(id);
-    return agenda != null;
-  }
 }

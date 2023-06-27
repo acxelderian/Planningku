@@ -41,15 +41,16 @@ class DatabaseHelper{
     return results.map((res)=>Agenda.fromMap(res)).first;
   }
 
-  Future<Agenda?> getAgendaByIdCanBeNull(int id) async {
+
+  Future <List<Agenda>> getAgendaByIdCanBeNull(int id) async {
     final Database db = await database;
     List<Map<String,dynamic>> results = await db.query(_tableName,
         where:"id=?", whereArgs: [id]);
     if(results.isNotEmpty) {
-      return results.map((res)=>Agenda.fromMap(res)).first;
+      return results.map((res)=>Agenda.fromMap(res)).toList();
     }
     else {
-      return null;
+      return [];
     }
   }
 
