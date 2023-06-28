@@ -62,7 +62,7 @@ class DetailAgendaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Detail Agenda"),
+        title: Image.asset("images/planningku-logo-nobg-black.png", width: 80,),
         actions: [
           IconButton(
             onPressed: (){

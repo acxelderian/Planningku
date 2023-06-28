@@ -13,7 +13,7 @@ class LogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Log'),
+        title: Image.asset("images/planningku-logo-nobg-black.png", width: 80,),
       ),
       body: Consumer<DbProvider>(
           builder:(context,provider,child) {
@@ -23,7 +23,7 @@ class LogScreen extends StatelessWidget {
               itemCount: arrAgenda.length,
               itemBuilder: (context,index){
                 final agenda = arrAgenda[index];
-                return buildItem(context, agenda, Colors.blueAccent);
+                return buildItem(context, agenda, Colors.white30);
               },
             );
           },

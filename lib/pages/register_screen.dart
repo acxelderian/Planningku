@@ -86,7 +86,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register Page'),
+        title: Image.asset("images/planningku-logo-nobg-black.png", width: 80,),
+        backgroundColor: Colors.blueGrey,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -159,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 8.0,),
                       MaterialButton(
-                        color:Theme.of(context).primaryColor,
+                        color: Colors.blueGrey,
                         height: 50,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         onPressed: _register,

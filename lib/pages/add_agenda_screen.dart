@@ -91,7 +91,7 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Aplikasi Agenda'),
+        title: Image.asset("images/planningku-logo-nobg-black.png", width: 80,),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -107,7 +107,7 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                       "Add a New Schedule",
                       style: TextStyle(
                         fontSize: 25,
-                        color: Colors.blueAccent,
+                        color: Colors.black,
                         fontFamily: "Poppins",
                       ),
                     ),

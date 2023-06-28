@@ -108,7 +108,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Aplikasi Agenda'),
+        title: Image.asset("images/planningku-logo-nobg-black.png", width: 80,),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: _firestore.collection('agendas').orderBy('date', descending: true).snapshots(),

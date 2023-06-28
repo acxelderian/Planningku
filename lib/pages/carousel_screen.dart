@@ -38,7 +38,8 @@ class _CarouselScreenState extends State<CarouselScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Carousel App'),
+        title: Image.asset("images/planningku-logo-nobg-black.png", width: 80,),
+        backgroundColor: Colors.blueGrey,
       ),
       body: Column(
         children: [
