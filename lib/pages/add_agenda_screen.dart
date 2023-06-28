@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dicoding/Provider/dbprovider.dart';
+import 'package:dicoding/pages/log_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dicoding/models/agenda.dart';
+import 'package:provider/provider.dart';
 
 class AddAgendaScreen extends StatefulWidget {
   static const routeName = '/add_agenda';
@@ -262,6 +265,15 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                           'email':_activeUser?.email,
                           'type':_jenis,
                         });
+                        Provider.of<DbProvider>(context,listen:false).addAgenda(
+                            Agenda(
+                              nama: _namaController.text,
+                              deskripsi: _deskripsiController.text,
+                              tanggal: _tanggalController.text,
+                              waktu: _waktuController.text,
+                              jenis: _jenis,
+                            )
+                        );
                         listAgenda.add(
                           Agenda(
                             nama: _namaController.text,
@@ -289,6 +301,12 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>const LogScreen()));
+        },
+        child: Icon(Icons.history)
       ),
     );
   }

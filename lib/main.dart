@@ -4,6 +4,7 @@ import 'package:dicoding/pages/carousel_screen.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
 import 'package:dicoding/pages/home_kas_screen.dart';
 import 'package:dicoding/pages/home_screen.dart';
+import 'package:dicoding/pages/log_screen.dart';
 import 'package:dicoding/pages/login_screen.dart';
 import 'package:dicoding/pages/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +18,7 @@ import 'firebase_options.dart';
 import 'models/agenda.dart';
 
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
+  await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
           CarouselScreen.routeName:(context) => CarouselScreen(),
           LoginScreen.routeName:(context) => LoginScreen(),
           RegisterScreen.routeName:(context) => RegisterScreen(),
+          LogScreen.routeName: (context) => LogScreen(),
         },
         home: FutureBuilder<User?>(
           future: checkLoginStatus(),
