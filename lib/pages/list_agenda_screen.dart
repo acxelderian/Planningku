@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
+import 'package:dicoding/pages/update_agenda_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -88,6 +89,24 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
     }
   }
 
+  void deleteFirebase(Agenda agenda) async {
+    final documentId = agenda.id;
+    try {
+      // Get the reference to the document you want to delete
+      DocumentReference documentRef =
+      _firestore.collection('agendas').doc(documentId);
+
+      // Delete the document
+      await documentRef.delete();
+      setState(() {
+
+      });
+      print('Document deleted successfully');
+    } catch (error) {
+      print('Error deleting document: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,12 +130,14 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
           listAgenda.clear(); // Clear the listAgenda before populating it again
           for (var agendaDoc in agendaDocs) {
             final agendaData = agendaDoc.data();
-            if (agendaData['date'].compareTo(Timestamp.now()) > 0 &&
-                agendaDoc['email'] == _activeUser?.email) {
-              final agenda = Agenda.fromJson(agendaData);
+            final agendaId = agendaDoc.id;
+            // if (agendaData['date'].compareTo(Timestamp.now()) > 0 &&
+            //     agendaDoc['email'] == _activeUser?.email) {
+              final agenda = Agenda.fromJson(agendaData,agendaId);
               listAgenda.add(agenda);
-            }
+            // }
           }
+          print(listAgenda.length);
           updateEventsFromListAgenda(listAgenda);
           return CustomScrollView(
             slivers: [
@@ -154,7 +175,162 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   final agenda = listAgenda[index];
-                  return buildItem(context, agenda, Colors.blueAccent);
+                  return ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    leading: Icon(
+                      agenda.jenis == "Pendidikan" ? Icons.cast_for_education : Icons.work,
+                      color: Colors.black,
+                    ),
+                    title: Text(
+                      agenda.nama,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                    subtitle: Text(
+                      "${agenda.tanggal} ${agenda.waktu}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.black, width: 1),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    tileColor: Colors.blueAccent,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return DetailAgendaScreen(agenda: agenda);
+                          },
+                        ),
+                      );
+                    },
+                    trailing: Wrap(
+                      children: <Widget>[
+                        // IconButton(
+                        //   icon: Icon(Icons.star),
+                        //   color: _isButtonPressed ? Colors.yellow : Colors.transparent,
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       if (_isButtonPressed) {
+                        //         dbProvider.deleteAgenda(agenda.id!);
+                        //       } else {
+                        //         dbProvider.addAgenda(agenda);
+                        //       }
+                        //       _isButtonPressed = !_isButtonPressed;
+                        //     });
+                        //   },
+                        // ),
+                        // IconButton(
+                        //     icon: Icon(
+                        //         Icons.star
+                        //     ),
+                        //     color: Colors.yellow,
+                        //     onPressed: () {
+                        //       Provider.of<DbProvider> (context, listen: false).addAgenda(
+                        //          agenda
+                        //       );
+                        //     }
+                        // ),
+                        // Consumer<DbProvider>(
+                        //   builder: (context, dbProvider, _) {
+                        //     return FutureBuilder<bool?>(
+                        //       future: dbProvider.isAgendaFavorite(agenda.id!),
+                        //       builder: (context, snapshot) {
+                        //         if (snapshot.connectionState == ConnectionState.waiting) {
+                        //           // Handle the loading state if needed
+                        //           return CircularProgressIndicator();
+                        //         } else if (snapshot.hasError) {
+                        //           // Handle the error state if needed
+                        //           return Text('Error');
+                        //         } else {
+                        //           bool isFavorite = snapshot.data ?? false;
+                        //           Color color = isFavorite ? Colors.yellow : Colors.transparent;
+                        //           return IconButton(
+                        //             icon: Icon(Icons.star),
+                        //             color: color,
+                        //             onPressed: () {
+                        //               dbProvider.addAgenda(agenda);
+                        //             },
+                        //           );
+                        //         }
+                        //       },
+                        //     );
+                        //   },
+                        // ),
+                        // IconButton(
+                        //   icon: Icon(Icons.star),
+                        //   color: Colors.white,
+                        //   onPressed: () {
+                        //     // dbProvider.addAgenda(agenda);
+                        //   },
+                        // ),
+                        // Consumer<DbProvider>(
+                        //   builder: (context, dbProvider, _) {
+                        //     return FutureBuilder<List<Agenda>>(
+                        //       future: dbProvider.getAgendaByIdCanBeNull(agenda.id!),
+                        //       builder: (context, snapshot) {
+                        //         if (snapshot.connectionState == ConnectionState.waiting) {
+                        //           // Handle the loading state if needed
+                        //           return CircularProgressIndicator();
+                        //         } else if (snapshot.hasError) {
+                        //           // Handle the error state if needed
+                        //           return Text('Error');
+                        //         } else {
+                        //           List<Agenda> agendas = snapshot.data!;
+                        //           if (agendas.length == 0) {
+                        //             return IconButton(
+                        //               icon: Icon(Icons.star),
+                        //                   color: Colors.white30,
+                        //                   onPressed: () {
+                        //                     dbProvider.addAgenda(agenda);
+                        //                   },
+                        //             );
+                        //           } else {
+                        //             return IconButton(
+                        //               icon: Icon(Icons.star),
+                        //               color: Colors.yellow,
+                        //               onPressed: () {
+                        //                 dbProvider.deleteAgenda(agenda.id!);
+                        //               },
+                        //             );
+                        //           }
+                        //         }
+                        //       },
+                        //     );
+                        //   },
+                        // ),
+                        IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              // edit agenda
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return UpdateAgendaScreen(agenda: agenda, updateIndex: (int) {
+                                      Navigator.pop(context);
+                                    },);
+                                  },
+                                ),
+                              );
+                            }
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () async {
+                              // delete agenda
+                              deleteFirebase(agenda);
+                            }
+                        ),
+                      ],
+                    ),
+                  );
                 },
                 itemCount: listAgenda.length,
               ),
@@ -171,151 +347,5 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
   }
 }
 
-Widget buildItem(BuildContext context, Agenda agenda, Color color) {
-  print(agenda.id);
-  return ListTile(
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    leading: Icon(
-      agenda.jenis == "Pendidikan" ? Icons.cast_for_education : Icons.work,
-      color: Colors.black,
-    ),
-    title: Text(
-      agenda.nama,
-      style: const TextStyle(
-        fontSize: 16,
-        fontFamily: "Poppins",
-      ),
-    ),
-    subtitle: Text(
-      "${agenda.tanggal} ${agenda.waktu}",
-      style: const TextStyle(
-        fontSize: 16,
-        fontFamily: "Poppins",
-      ),
-    ),
-    shape: RoundedRectangleBorder(
-      side: const BorderSide(color: Colors.black, width: 1),
-      borderRadius: BorderRadius.circular(5),
-    ),
-    tileColor: color,
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return DetailAgendaScreen(agenda: agenda);
-          },
-        ),
-      );
-    },
-    trailing: Wrap(
-      children: <Widget>[
-        // IconButton(
-        //   icon: Icon(Icons.star),
-        //   color: _isButtonPressed ? Colors.yellow : Colors.transparent,
-        //   onPressed: () {
-        //     setState(() {
-        //       if (_isButtonPressed) {
-        //         dbProvider.deleteAgenda(agenda.id!);
-        //       } else {
-        //         dbProvider.addAgenda(agenda);
-        //       }
-        //       _isButtonPressed = !_isButtonPressed;
-        //     });
-        //   },
-        // ),
-        // IconButton(
-        //     icon: Icon(
-        //         Icons.star
-        //     ),
-        //     color: Colors.yellow,
-        //     onPressed: () {
-        //       Provider.of<DbProvider> (context, listen: false).addAgenda(
-        //          agenda
-        //       );
-        //     }
-        // ),
-        // Consumer<DbProvider>(
-        //   builder: (context, dbProvider, _) {
-        //     return FutureBuilder<bool?>(
-        //       future: dbProvider.isAgendaFavorite(agenda.id!),
-        //       builder: (context, snapshot) {
-        //         if (snapshot.connectionState == ConnectionState.waiting) {
-        //           // Handle the loading state if needed
-        //           return CircularProgressIndicator();
-        //         } else if (snapshot.hasError) {
-        //           // Handle the error state if needed
-        //           return Text('Error');
-        //         } else {
-        //           bool isFavorite = snapshot.data ?? false;
-        //           Color color = isFavorite ? Colors.yellow : Colors.transparent;
-        //           return IconButton(
-        //             icon: Icon(Icons.star),
-        //             color: color,
-        //             onPressed: () {
-        //               dbProvider.addAgenda(agenda);
-        //             },
-        //           );
-        //         }
-        //       },
-        //     );
-        //   },
-        // ),
-        // IconButton(
-        //   icon: Icon(Icons.star),
-        //   color: Colors.white,
-        //   onPressed: () {
-        //     // dbProvider.addAgenda(agenda);
-        //   },
-        // ),
-        // Consumer<DbProvider>(
-        //   builder: (context, dbProvider, _) {
-        //     return FutureBuilder<List<Agenda>>(
-        //       future: dbProvider.getAgendaByIdCanBeNull(agenda.id!),
-        //       builder: (context, snapshot) {
-        //         if (snapshot.connectionState == ConnectionState.waiting) {
-        //           // Handle the loading state if needed
-        //           return CircularProgressIndicator();
-        //         } else if (snapshot.hasError) {
-        //           // Handle the error state if needed
-        //           return Text('Error');
-        //         } else {
-        //           List<Agenda> agendas = snapshot.data!;
-        //           if (agendas.length == 0) {
-        //             return IconButton(
-        //               icon: Icon(Icons.star),
-        //                   color: Colors.white30,
-        //                   onPressed: () {
-        //                     dbProvider.addAgenda(agenda);
-        //                   },
-        //             );
-        //           } else {
-        //             return IconButton(
-        //               icon: Icon(Icons.star),
-        //               color: Colors.yellow,
-        //               onPressed: () {
-        //                 dbProvider.deleteAgenda(agenda.id!);
-        //               },
-        //             );
-        //           }
-        //         }
-        //       },
-        //     );
-        //   },
-        // ),
-        IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              // edit agenda
-            }
-        ),
-        IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              // delete agenda
-            }
-        ),
-      ],
-    ),
-  );
-}
+
+
