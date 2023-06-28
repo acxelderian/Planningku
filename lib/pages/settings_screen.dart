@@ -84,7 +84,7 @@ class SettingsScreen extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(80),
                 child: Image.asset(
-                  'images/lgtm.jpg',
+                  'images/ppicture2.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
