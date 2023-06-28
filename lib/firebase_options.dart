@@ -44,40 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBcauXRm2ejxtbezL_lGHDzZowFyjA-6Sw',
-    appId: '1:649571274738:web:fb9222c76fe776c290e56b',
-    messagingSenderId: '649571274738',
-    projectId: 'planningku-app',
-    authDomain: 'planningku-app.firebaseapp.com',
-    storageBucket: 'planningku-app.appspot.com',
-    measurementId: 'G-2PWPT3KXEB',
+    apiKey: 'AIzaSyCk9I2olC9I0nD_jxOLWROSzxCqXPG8PjE',
+    appId: '1:392485463518:web:dbc3494bba401485b3694f',
+    messagingSenderId: '392485463518',
+    projectId: 'agenda-app-1aeb9',
+    authDomain: 'agenda-app-1aeb9.firebaseapp.com',
+    storageBucket: 'agenda-app-1aeb9.appspot.com',
+    measurementId: 'G-69TTE5RJJ6',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDb-3eyYCHvGWh87rUyaYfwQAEgfhzQlqM',
-    appId: '1:649571274738:android:09be0354fbb037a190e56b',
-    messagingSenderId: '649571274738',
-    projectId: 'planningku-app',
-    storageBucket: 'planningku-app.appspot.com',
+    apiKey: 'AIzaSyCOE2FOhcUtFisWxhwx4nREeq5YjN0TqvA',
+    appId: '1:392485463518:android:ce8059e98027f065b3694f',
+    messagingSenderId: '392485463518',
+    projectId: 'agenda-app-1aeb9',
+    storageBucket: 'agenda-app-1aeb9.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDRMMwGaDVjgB44U34-S7NLLwJGxDI32k4',
-    appId: '1:649571274738:ios:c71c93f2c418ba3e90e56b',
-    messagingSenderId: '649571274738',
-    projectId: 'planningku-app',
-    storageBucket: 'planningku-app.appspot.com',
-    iosClientId: '649571274738-qodc5eedmbd12psbnu4tgqslt5g56c3f.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDSqyTZehiEVrTeaTKqBl68m40MIGRZh04',
+    appId: '1:392485463518:ios:695faca8a95cf435b3694f',
+    messagingSenderId: '392485463518',
+    projectId: 'agenda-app-1aeb9',
+    storageBucket: 'agenda-app-1aeb9.appspot.com',
+    iosClientId: '392485463518-iba2tse257b6vl6ggci16tm497s882ri.apps.googleusercontent.com',
     iosBundleId: 'com.example.dicoding',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDRMMwGaDVjgB44U34-S7NLLwJGxDI32k4',
-    appId: '1:649571274738:ios:c71c93f2c418ba3e90e56b',
-    messagingSenderId: '649571274738',
-    projectId: 'planningku-app',
-    storageBucket: 'planningku-app.appspot.com',
-    iosClientId: '649571274738-qodc5eedmbd12psbnu4tgqslt5g56c3f.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDSqyTZehiEVrTeaTKqBl68m40MIGRZh04',
+    appId: '1:392485463518:ios:695faca8a95cf435b3694f',
+    messagingSenderId: '392485463518',
+    projectId: 'agenda-app-1aeb9',
+    storageBucket: 'agenda-app-1aeb9.appspot.com',
+    iosClientId: '392485463518-iba2tse257b6vl6ggci16tm497s882ri.apps.googleusercontent.com',
     iosBundleId: 'com.example.dicoding',
   );
 }
