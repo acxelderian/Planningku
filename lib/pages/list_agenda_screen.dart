@@ -5,6 +5,7 @@ import 'package:dicoding/pages/detail_agenda_screen.dart';
 import 'package:dicoding/pages/update_agenda_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -64,6 +65,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
     }
     _getEventsForDay;
   }
+  List<Agenda> _selectedDayEvents = [];
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
@@ -72,8 +74,10 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
+        _selectedDayEvents = _getEventsForDay(selectedDay);
       });
     }
+
   }
 
   late User? _activeUser;
@@ -142,64 +146,104 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: TableCalendar<Agenda>(
-                  firstDay: kFirstDay,
-                  lastDay: kLastDay,
-                  focusedDay: _focusedDay,
-                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                  rangeStartDay: _rangeStart,
-                  rangeEndDay: _rangeEnd,
-                  calendarFormat: _calendarFormat,
-                  rangeSelectionMode: _rangeSelectionMode,
-                  eventLoader: _getEventsForDay,
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  calendarStyle: const CalendarStyle(
-                    outsideDaysVisible: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Card(
+                    margin: const EdgeInsets.all(8.0),
+                    elevation: 5.0,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      side: BorderSide( color: Colors.black, width: 2.0),
+                    ),
+                    child: TableCalendar<Agenda>(
+                      firstDay: kFirstDay,
+                      lastDay: kLastDay,
+                      focusedDay: _focusedDay,
+                      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                      rangeStartDay: _rangeStart,
+                      rangeEndDay: _rangeEnd,
+                      calendarFormat: _calendarFormat,
+                      rangeSelectionMode: _rangeSelectionMode,
+                      eventLoader: _getEventsForDay,
+                      startingDayOfWeek: StartingDayOfWeek.monday,
+                      calendarStyle: const CalendarStyle(
+                        outsideDaysVisible: false,
+
+                      ),
+                      headerStyle: const HeaderStyle(
+                        headerPadding: EdgeInsets.only(top: 1),
+                        titleTextStyle:
+                          TextStyle(color: Colors.white, fontSize: 20.0),
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10))),
+                        titleCentered: true,
+                        formatButtonVisible: false,
+                        leftChevronIcon: Icon(
+                          Icons.chevron_left,
+                          color: Colors.white38,
+                          size: 28,
+                        ),
+                        rightChevronIcon: Icon(
+                          Icons.chevron_right,
+                          color: Colors.white38,
+                          size: 28,
+                        ),
+                      ),
+                      daysOfWeekHeight: 30,
+                      rowHeight: 40,
+                      onDaySelected: _onDaySelected,
+                      onFormatChanged: (format) {
+                        if (_calendarFormat != format) {
+                          setState(() {
+                            _calendarFormat = format;
+                          });
+                        }
+                      },
+                      onPageChanged: (focusedDay) {
+                        _focusedDay = focusedDay;
+                      },
+                    ),
                   ),
-                  onDaySelected: _onDaySelected,
-                  onFormatChanged: (format) {
-                    if (_calendarFormat != format) {
-                      setState(() {
-                        _calendarFormat = format;
-                      });
-                    }
-                  },
-                  onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
-                  },
                 ),
               ),
               SliverList.separated(
                 separatorBuilder: (context, index) => const SizedBox(
-                  height: 15,
+                  height: 0,
                 ),
+                itemCount: _selectedDayEvents.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final agenda = listAgenda[index];
+                  final agenda = _selectedDayEvents[index];
                   return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    leading: Icon(
-                      agenda.jenis == "Pendidikan" ? Icons.cast_for_education : Icons.work,
-                      color: Colors.black,
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        agenda.jenis == "Pendidikan" ? Icons.cast_for_education : Icons.work,
+                        color: Colors.black,
+                      ),
                     ),
                     title: Text(
                       agenda.nama,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontFamily: "Poppins",
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     subtitle: Text(
-                      "${agenda.tanggal} ${agenda.waktu}",
+                      "${agenda.jenis} ",
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontFamily: "Poppins",
                       ),
                     ),
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.circular(5),
                     ),
-                    tileColor: Colors.blueAccent,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -211,6 +255,9 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                       );
                     },
                     trailing: Wrap(
+                      direction: Axis.vertical,
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
                         // IconButton(
                         //   icon: Icon(Icons.star),
@@ -305,34 +352,46 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                         //     );
                         //   },
                         // ),
-                        IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              // edit agenda
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return UpdateAgendaScreen(agenda: agenda, updateIndex: (int) {
-                                      Navigator.pop(context);
-                                    },);
-                                  },
-                                ),
-                              );
-                            }
+                        // IconButton(
+                        //     icon: Icon(Icons.edit),
+                        //     onPressed: () {
+                        //       // edit agenda
+                        //       Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //           builder: (context) {
+                        //             return UpdateAgendaScreen(agenda: agenda, updateIndex: (int) {
+                        //               Navigator.pop(context);
+                        //             },);
+                        //           },
+                        //         ),
+                        //       );
+                        //     }
+                        // ),
+                        // IconButton(
+                        //     icon: Icon(Icons.delete),
+                        //     onPressed: () async {
+                        //       // delete agenda
+                        //       deleteFirebase(agenda);
+                        //     }
+                        // ),
+                        Text(
+                          '${DateFormat('d MMM yyyy').format(DateTime.parse(agenda.tanggal))}',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
                         ),
-                        IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () async {
-                              // delete agenda
-                              deleteFirebase(agenda);
-                            }
-                        ),
+                        Text(
+                          '${agenda.waktu}',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black38
+                          ),
+                        )
                       ],
                     ),
                   );
                 },
-                itemCount: listAgenda.length,
               ),
             ],
           );
