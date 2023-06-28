@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-
 
 class HomeKasScreen extends StatelessWidget {
   static const routeName='/home_agenda';
@@ -38,7 +35,7 @@ class HomeKasScreen extends StatelessWidget {
                   child : Image.asset("./images/brown_default.gif"),
                 );
               }
-              return SizedBox(
+              return const SizedBox(
                 height: 1,
               );
             },

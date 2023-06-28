@@ -2,14 +2,10 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
-import 'package:dicoding/pages/update_agenda_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../Provider/dbprovider.dart';
 
 class ListAgendaScreen extends StatefulWidget {
   static const routeName = '/list_agenda';
@@ -23,9 +19,6 @@ class ListAgendaScreen extends StatefulWidget {
 class _ListAgendaScreenState extends State<ListAgendaScreen> {
   late final ValueNotifier<List<Agenda>> _selectedEvents;
   final _firestore = FirebaseFirestore.instance;
-  bool _isDbCalled = false;
-  List<Agenda>? _agendas;
-  bool _isButtonPressed = false;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay = DateTime.now();
@@ -63,7 +56,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
       final dateTime = DateTime.parse(agenda.tanggal);
       kEvents[dateTime] = [agenda];
     }
-    _getEventsForDay;
+    _selectedDayEvents = _getEventsForDay(_selectedDay!);
   }
   List<Agenda> _selectedDayEvents = [];
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -141,7 +134,6 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
               listAgenda.add(agenda);
             // }
           }
-          print(listAgenda.length);
           updateEventsFromListAgenda(listAgenda);
           return CustomScrollView(
             slivers: [
@@ -241,8 +233,8 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                         fontFamily: "Poppins",
                       ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Colors.black, width: 1),
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.black, width: 1),
                     ),
                     onTap: () {
                       Navigator.push(
@@ -376,14 +368,14 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                         //     }
                         // ),
                         Text(
-                          '${DateFormat('d MMM yyyy').format(DateTime.parse(agenda.tanggal))}',
-                          style: TextStyle(
+                          DateFormat('d MMM yyyy').format(DateTime.parse(agenda.tanggal)),
+                          style: const TextStyle(
                             fontSize: 15,
                           ),
                         ),
                         Text(
-                          '${agenda.waktu}',
-                          style: TextStyle(
+                          agenda.waktu,
+                          style: const TextStyle(
                             fontSize: 15,
                             color: Colors.black38
                           ),

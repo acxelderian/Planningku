@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/pages/update_agenda_screen.dart';
 import 'package:flutter/material.dart';
@@ -72,20 +70,20 @@ class DetailAgendaScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return UpdateAgendaScreen(agenda: agenda, updateIndex: (int) {
+                    return UpdateAgendaScreen(agenda: agenda, updateIndex: (index) {
                       Navigator.popUntil(context,ModalRoute.withName("/"));
                     });
                   },
                 ),
               );
             },
-            icon: Icon(Icons.edit)
+            icon: const Icon(Icons.edit)
           ),
           IconButton(
               onPressed: () async {
                 _showDialog(context, "Are you sure you want to delete this agenda?");
               },
-              icon: Icon(Icons.delete)
+              icon: const Icon(Icons.delete)
           )
         ],
       ),
@@ -107,17 +105,17 @@ class DetailAgendaScreen extends StatelessWidget {
             )
           ),
           Table(
-            columnWidths: {
+            columnWidths: const {
               0: FlexColumnWidth(3), // 30% of the page
               1: FlexColumnWidth(7), // 70% of the page
             },
             children: [
-              _buildTableRow('Type', '${agenda.jenis}'),
-              _buildTableRow('Date', '${DateFormat('d MMM yyyy').format(DateTime.parse(agenda.tanggal))}'),
-              _buildTableRow('Time', '${agenda.waktu}'),
+              _buildTableRow('Type', agenda.jenis),
+              _buildTableRow('Date', DateFormat('d MMM yyyy').format(DateTime.parse(agenda.tanggal))),
+              _buildTableRow('Time', agenda.waktu),
             ],
           ),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           Row(
             children: [
               Expanded(
@@ -133,7 +131,7 @@ class DetailAgendaScreen extends StatelessWidget {
                     child:Container(
                       height: 50,
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: Text(agenda.deskripsi),
                       ),
                     ),
@@ -152,11 +150,11 @@ TableRow _buildTableRow(String label, String value) {
     children: [
       TableCell(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4,horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 4),
           child: Card(
             elevation: 7.0,
             shadowColor: Colors.white38,
-            shape: StadiumBorder(
+            shape: const StadiumBorder(
               side: BorderSide(
                 color: Colors.black26,
                 style: BorderStyle.solid,
@@ -167,7 +165,7 @@ TableRow _buildTableRow(String label, String value) {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: Text(
                 label,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18
                 ),
@@ -178,21 +176,21 @@ TableRow _buildTableRow(String label, String value) {
       ),
       TableCell(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 16),
           child: Container(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                value,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
                   color: Colors.black12,
                   width: 0.7,
                 ),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                value,
+                style: const TextStyle(fontSize: 18),
               ),
             ),
           ),

@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dicoding/Provider/dbprovider.dart';
-import 'package:dicoding/pages/log_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dicoding/models/agenda.dart';
-import 'package:provider/provider.dart';
 
 class UpdateAgendaScreen extends StatefulWidget {
   static const routeName = '/update_agenda';
@@ -111,6 +108,7 @@ class _UpdateAgendaScreen extends State<UpdateAgendaScreen> {
               child: Column(
                 children: [
                   Container(
+                    margin: const EdgeInsets.only(top: 10),
                     child: const Text(
                       "Add a New Schedule",
                       style: TextStyle(
@@ -119,7 +117,6 @@ class _UpdateAgendaScreen extends State<UpdateAgendaScreen> {
                         fontFamily: "Poppins",
                       ),
                     ),
-                    margin: const EdgeInsets.only(top: 10),
                   ),
                   const Divider(),
                   const SizedBox(
@@ -276,13 +273,10 @@ class _UpdateAgendaScreen extends State<UpdateAgendaScreen> {
                         });
                         int indexDelete = -1;
                         for (int i =0;i<listAgenda.length;i++) {
-                          print(listAgenda[i].id.toString());
-                          print(widget.agenda.id);
                           if (listAgenda[i].id == widget.agenda.id) {
                             indexDelete = i;
                           }
                         }
-                        print("index "+indexDelete.toString());
                         listAgenda.removeAt(indexDelete);
                         listAgenda.add(
                           Agenda(

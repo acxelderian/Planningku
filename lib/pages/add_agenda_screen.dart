@@ -102,6 +102,7 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
               child: Column(
                 children: [
                   Container(
+                    margin: const EdgeInsets.only(top: 10),
                     child: const Text(
                       "Add a New Schedule",
                       style: TextStyle(
@@ -110,7 +111,6 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
                         fontFamily: "Poppins",
                       ),
                     ),
-                    margin: const EdgeInsets.only(top: 10),
                   ),
                   const Divider(),
                   const SizedBox(
@@ -306,7 +306,7 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>const LogScreen()));
         },
-        child: Icon(Icons.history)
+        child: const Icon(Icons.history)
       ),
     );
   }

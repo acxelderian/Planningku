@@ -1,7 +1,15 @@
+import 'package:dicoding/main.dart';
+import 'package:dicoding/pages/about_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = "/settings_screen";
+  final _auth = FirebaseAuth.instance;
+
+  SettingsScreen({super.key});
+
+
   @override
   Widget build(BuildContext context) {
      return Stack(
@@ -13,15 +21,15 @@ class SettingsScreen extends StatelessWidget {
                 height: 150,
                 color: Colors.grey[300],
               ),
-              SizedBox(height: 50,),
-              Center(
+              const SizedBox(height: 50,),
+              const Center(
                 child: Text(
                   'Jonathan Hans',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 8),
-              Center(
+              const SizedBox(height: 8),
+              const Center(
                 child: Text(
                   'Software Engineer',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
@@ -29,26 +37,38 @@ class SettingsScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   children: [
-                    SettingsCard(
-                      title: 'Account',
-                      icon: Icons.account_circle,
-                    ),
-                    SizedBox(height: 16),
-                    SettingsCard(
-                      title: 'Settings',
-                      icon: Icons.settings,
-                    ),
-                    SizedBox(height: 16),
-                    SettingsCard(
-                      title: 'Preferences',
-                      icon: Icons.star_border,
-                    ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     SettingsCard(
                       title: 'About',
                       icon: Icons.info,
+                      onPressed: (){
+                        Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const AboutScreen();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    SettingsCard(
+                      title: 'Sign out',
+                      icon: Icons.exit_to_app,
+                      onPressed: () async {
+                        try {
+                          await _auth.signOut();
+                          // Sign out successful
+                        } catch (e) {
+                          // An error occurred while signing out
+                        }
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const MyApp()),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -78,8 +98,9 @@ class SettingsScreen extends StatelessWidget {
 class SettingsCard extends StatelessWidget {
   final String title;
   final IconData icon;
+  final Function? onPressed;
 
-  const SettingsCard({required this.title, required this.icon});
+  const SettingsCard({super.key, required this.title, required this.icon, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +109,7 @@ class SettingsCard extends StatelessWidget {
         leading: Icon(icon),
         title: Text(title),
         onTap: () {
-          // Handle card tap
+          onPressed!();
         },
       ),
     );

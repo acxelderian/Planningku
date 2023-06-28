@@ -162,7 +162,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                               if (currentIndex==2){
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                                 );
                               }
                               setState(() {
