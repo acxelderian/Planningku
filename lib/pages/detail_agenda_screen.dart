@@ -39,7 +39,6 @@ class DetailAgendaScreen extends StatelessWidget {
                   // Delete the document
                   await documentRef.delete();
 
-                  Navigator.pop(context);
                   print('Document deleted successfully');
                 } catch (error) {
                 print('Error deleting document: $error');
