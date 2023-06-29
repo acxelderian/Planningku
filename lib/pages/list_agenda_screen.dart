@@ -2,8 +2,10 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dicoding/models/agenda.dart';
 import 'package:dicoding/pages/detail_agenda_screen.dart';
+import 'package:dicoding/pages/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -75,6 +77,39 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
 
   late User? _activeUser;
   final _auth = FirebaseAuth.instance;
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Pick a color!'),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: pickerColor,
+              onColorChanged: changeColor,
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text('OK'),
+              onPressed: () {
+                setState(() => currentColor = pickerColor);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   void getCurrentUser() async {
     try {
@@ -96,9 +131,9 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
       // Delete the document
       await documentRef.delete();
       setState(() {
-
       });
       print('Document deleted successfully');
+      Navigator.pop(context);
     } catch (error) {
       print('Error deleting document: $error');
     }
@@ -143,11 +178,11 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                   child: Card(
                     margin: const EdgeInsets.all(8.0),
                     elevation: 5.0,
-                    shape: const RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
-                      side: BorderSide( color: Colors.black, width: 2.0),
+                      side: BorderSide( color: currentColor, width: 2.0),
                     ),
                     child: TableCalendar<Agenda>(
                       firstDay: kFirstDay,
@@ -164,12 +199,12 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
                         outsideDaysVisible: false,
 
                       ),
-                      headerStyle: const HeaderStyle(
+                      headerStyle: HeaderStyle(
                         headerPadding: EdgeInsets.only(top: 1),
                         titleTextStyle:
                           TextStyle(color: Colors.white, fontSize: 20.0),
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: currentColor,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10))),
@@ -389,8 +424,16 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: "color1",
+        onPressed: () {
+          _showDialog(context);
+        },
+        child: Icon(Icons.color_lens),
+      ),
     );
   }
+
 
 
   static int getHashCode(DateTime key) {

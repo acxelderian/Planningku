@@ -303,6 +303,7 @@ class _AddAgendaScreen extends State<AddAgendaScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "agenda1",
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>const LogScreen()));
         },
