@@ -47,6 +47,7 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
     // Implementation example
     return kEvents[day] ?? [];
   }
+
   LinkedHashMap<DateTime, List<Agenda>> kEvents = LinkedHashMap<DateTime, List<Agenda>>(
     equals: isSameDay,
     hashCode: getHashCode,
@@ -56,7 +57,8 @@ class _ListAgendaScreenState extends State<ListAgendaScreen> {
 
     for (final agenda in listAgenda) {
       final dateTime = DateTime.parse(agenda.tanggal);
-      kEvents[dateTime] = [agenda];
+      kEvents[dateTime] ??= []; // Initialize the list if it doesn't exist
+      kEvents[dateTime]!.add(agenda); // Add the event to the list for the date
     }
     _selectedDayEvents = _getEventsForDay(_selectedDay!);
   }
